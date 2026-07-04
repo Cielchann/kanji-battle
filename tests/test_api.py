@@ -340,8 +340,8 @@ def test_player_name_is_locked_to_first_device(client) -> None:
     assert other_device_start.status_code == 409
 
 
-def test_leaderboard_returns_every_score_for_same_player(client) -> None:
-    player_name = f"RUNS-{uuid4().hex[:8]}"
+def test_leaderboard_accumulates_weekly_score_for_same_player(client) -> None:
+    player_name = f"TOTAL-{uuid4().hex[:8]}"
     with SessionLocal() as db:
         db.add_all(
             [
@@ -380,5 +380,8 @@ def test_leaderboard_returns_every_score_for_same_player(client) -> None:
     assert leaderboard_response.status_code == 200
     leaderboard = leaderboard_response.json()
     matches = [entry for entry in leaderboard if entry["player_name"] == player_name]
-    assert len(matches) == 2
-    assert [entry["score"] for entry in matches] == [2000, 900]
+    assert len(matches) == 1
+    assert matches[0]["score"] == 2900
+    assert matches[0]["max_combo"] == 8
+    assert matches[0]["xp_earned"] == 30
+    assert matches[0]["gold_earned"] == 15
