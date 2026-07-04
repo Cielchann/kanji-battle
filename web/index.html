@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-store" />
+    <title>JLPT Kanji Battle</title>
+    <link rel="stylesheet" href="/static/styles.css?v=17" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">JLPT Kanji Battle</p>
+          <h1>Battle Mode</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="wallet-pill" title="Owned gold">
+            <span>Gold</span>
+            <strong id="goldWallet">0</strong>
+          </div>
+          <button class="icon-button" id="refreshProgress" type="button" title="Refresh progress">↻</button>
+        </div>
+      </header>
+
+      <section class="panel setup-panel" id="setupPanel">
+        <label class="field">
+          <span>Player</span>
+          <input id="playerName" maxlength="40" placeholder="Afras" />
+        </label>
+
+        <div class="grid-2">
+          <label class="field">
+            <span>Language</span>
+            <select id="language">
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
+          </label>
+
+          <div class="mix-note">
+            <span>Mix</span>
+            <strong>N5-N1 weighted</strong>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-label">Difficulty</div>
+          <div class="difficulty-grid" id="difficultyGrid"></div>
+        </div>
+
+        <button class="primary-button" id="startBattle" type="button">Start Battle</button>
+      </section>
+
+      <section class="battle-view" id="battleView" hidden>
+        <div class="status-grid">
+          <div class="stat-box" id="playerHpBox">
+            <span>Player HP</span>
+            <strong id="playerHp">100</strong>
+          </div>
+          <div class="stat-box">
+            <span>Monster HP</span>
+            <strong id="monsterHp">100</strong>
+          </div>
+          <div class="stat-box">
+            <span>Combo</span>
+            <strong id="combo">0</strong>
+          </div>
+          <div class="stat-box">
+            <span>Score</span>
+            <strong id="score">0</strong>
+          </div>
+          <div class="stat-box wide-stat">
+            <span>Weapon</span>
+            <strong id="weaponName">None</strong>
+          </div>
+        </div>
+
+        <section class="arena-panel" id="monsterPanel">
+          <div class="slash-effect" id="slashEffect"></div>
+          <div class="floating-damage" id="floatingDamage"></div>
+          <div class="arena-head">
+            <div>
+              <p class="eyebrow" id="monsterName">Kanji Oni</p>
+              <h2 id="battleStatus">In progress</h2>
+            </div>
+            <strong id="monsterHpReadout">100</strong>
+          </div>
+          <div class="arena-stage" id="phaserArena">
+            <div class="arena-loading">Loading arena...</div>
+          </div>
+          <div class="hp-bar">
+            <div id="monsterHpBar"></div>
+          </div>
+        </section>
+
+        <section class="question-panel" id="questionPanel">
+          <div class="question-meta">
+            <p class="question-type" id="questionText">Choose the correct answer.</p>
+            <span id="questionPower">Power 1</span>
+          </div>
+          <div class="prompt" id="prompt">山</div>
+          <div class="choices" id="choices"></div>
+        </section>
+
+        <section class="result-panel" id="resultPanel" hidden>
+          <h2 id="resultTitle">Clear</h2>
+          <p id="resultSummary"></p>
+          <div class="reward-row">
+            <span id="xpEarned">0 XP</span>
+            <span id="goldEarned">0 Gold</span>
+          </div>
+          <button class="primary-button" id="newBattle" type="button">New Battle</button>
+        </section>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Hero</h2>
+          <span id="heroSummary">0 XP · 0 Gold</span>
+        </div>
+        <div class="unlock-list" id="unlockList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2>Weapon Shop</h2>
+            <span id="shopGold">0 Gold</span>
+          </div>
+          <button class="text-button" id="refreshShop" type="button">Refresh</button>
+        </div>
+        <div class="shop-list" id="shopList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Weekly Leaderboard</h2>
+          <button class="text-button" id="refreshLeaderboard" type="button">Refresh</button>
+        </div>
+        <ol class="leaderboard" id="leaderboard"></ol>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" hidden></div>
+    <script src="/static/vendor/phaser.min.js?v=17"></script>
+    <script src="/static/phaser-arena.js?v=17"></script>
+    <script src="/static/app.js?v=17"></script>
+  </body>
+</html>
