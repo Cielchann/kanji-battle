@@ -340,7 +340,7 @@ def test_player_name_is_locked_to_first_device(client) -> None:
     assert other_device_start.status_code == 409
 
 
-def test_leaderboard_accumulates_weekly_score_for_same_player(client) -> None:
+def test_leaderboard_accumulates_weekly_score_for_same_player_across_difficulties(client) -> None:
     player_name = f"TOTAL-{uuid4().hex[:8]}"
     with SessionLocal() as db:
         db.add_all(
@@ -361,7 +361,7 @@ def test_leaderboard_accumulates_weekly_score_for_same_player(client) -> None:
                     battle_id=f"score-high-{uuid4()}",
                     player_name=f" {player_name} ",
                     jlpt_level=None,
-                    difficulty="easy",
+                    difficulty="medium",
                     score=2000,
                     max_combo=8,
                     xp_earned=20,
@@ -375,7 +375,7 @@ def test_leaderboard_accumulates_weekly_score_for_same_player(client) -> None:
 
     leaderboard_response = client.get(
         "/leaderboard",
-        params={"difficulty": "easy", "limit": 100},
+        params={"limit": 100},
     )
     assert leaderboard_response.status_code == 200
     leaderboard = leaderboard_response.json()

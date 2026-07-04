@@ -236,14 +236,13 @@ async function loadShop() {
 
 async function loadLeaderboard() {
   const params = new URLSearchParams({
-    difficulty: state.selectedDifficulty,
     limit: "5",
   });
   const entries = await api(`/leaderboard?${params.toString()}`);
   els.leaderboard.innerHTML = "";
   if (entries.length === 0) {
     const empty = document.createElement("li");
-    empty.innerHTML = `<span>No clears this week</span><small>${state.selectedDifficulty}</small>`;
+    empty.innerHTML = `<span>No clears this week</span><small>weekly total</small>`;
     els.leaderboard.appendChild(empty);
     return;
   }

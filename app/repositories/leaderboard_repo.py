@@ -26,8 +26,6 @@ class LeaderboardRepository:
 
         stmt = select(
             display_player_name,
-            ScoreRecord.jlpt_level,
-            ScoreRecord.difficulty,
             total_score,
             best_combo,
             total_xp,
@@ -35,14 +33,8 @@ class LeaderboardRepository:
             first_week_start,
         ).group_by(
             normalized_player_name,
-            ScoreRecord.jlpt_level,
-            ScoreRecord.difficulty,
             ScoreRecord.week_start,
         )
-        if jlpt_level is not None:
-            stmt = stmt.where(ScoreRecord.jlpt_level == jlpt_level.value)
-        if difficulty is not None:
-            stmt = stmt.where(ScoreRecord.difficulty == difficulty.value)
         if current_week_only:
             stmt = stmt.where(ScoreRecord.week_start == current_week_start())
 
@@ -54,8 +46,8 @@ class LeaderboardRepository:
                 LeaderboardEntry(
                     rank=len(entries) + 1,
                     player_name=record.player_name,
-                    jlpt_level=JlptLevel(record.jlpt_level) if record.jlpt_level else None,
-                    difficulty=Difficulty(record.difficulty),
+                    jlpt_level=None,
+                    difficulty=None,
                     score=int(record.total_score or 0),
                     max_combo=int(record.best_combo or 0),
                     xp_earned=int(record.total_xp or 0),
