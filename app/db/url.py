@@ -20,7 +20,7 @@ def _normalize_neon_ssl(database_url: str) -> str:
     query_items = dict(parse_qsl(parsed.query, keep_blank_values=True))
     query_items.setdefault("sslmode", "require")
     query_items.setdefault("connect_timeout", getenv("NEON_CONNECT_TIMEOUT", "10"))
-    if getenv("NEON_FORCE_IPV4", "true").lower() not in {"0", "false", "no"}:
+    if getenv("NEON_FORCE_IPV4", "false").lower() in {"1", "true", "yes"}:
         ipv4_hostaddr = _resolve_ipv4(parsed.hostname)
         if ipv4_hostaddr is not None:
             query_items.setdefault("hostaddr", ipv4_hostaddr)
