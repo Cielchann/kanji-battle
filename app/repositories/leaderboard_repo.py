@@ -21,9 +21,11 @@ class LeaderboardRepository:
         total_xp = func.sum(ScoreRecord.xp_earned).label("total_xp")
         total_gold = func.sum(ScoreRecord.gold_earned).label("total_gold")
         first_week_start = func.min(ScoreRecord.week_start).label("week_start")
+        normalized_player_name = func.lower(func.trim(ScoreRecord.player_name))
+        display_player_name = func.min(func.trim(ScoreRecord.player_name)).label("player_name")
 
         stmt = select(
-            ScoreRecord.player_name,
+            display_player_name,
             ScoreRecord.jlpt_level,
             ScoreRecord.difficulty,
             total_score,
@@ -32,7 +34,7 @@ class LeaderboardRepository:
             total_gold,
             first_week_start,
         ).group_by(
-            ScoreRecord.player_name,
+            normalized_player_name,
             ScoreRecord.jlpt_level,
             ScoreRecord.difficulty,
             ScoreRecord.week_start,
@@ -44,7 +46,7 @@ class LeaderboardRepository:
         if current_week_only:
             stmt = stmt.where(ScoreRecord.week_start == current_week_start())
 
-        stmt = stmt.order_by(desc(total_score), desc(best_combo), ScoreRecord.player_name).limit(limit)
+        stmt = stmt.order_by(desc(total_score), desc(best_combo), display_player_name).limit(limit)
         records = db.execute(stmt).all()
         entries: list[LeaderboardEntry] = []
         for record in records:

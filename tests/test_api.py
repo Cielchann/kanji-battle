@@ -359,7 +359,7 @@ def test_leaderboard_accumulates_weekly_score_for_same_player(client) -> None:
                 ),
                 ScoreRecord(
                     battle_id=f"score-high-{uuid4()}",
-                    player_name=player_name,
+                    player_name=f" {player_name} ",
                     jlpt_level=None,
                     difficulty="easy",
                     score=2000,
